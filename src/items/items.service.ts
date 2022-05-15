@@ -20,7 +20,6 @@ export class ItemsService {
     });
 
     await this.itemRepository.save(item);
-
     return item;
   }
 
@@ -49,8 +48,10 @@ export class ItemsService {
     return task;
   }
 
-  async remove(id: string): Promise<void> {
+  async remove(id: string): Promise<boolean> {
     const task = await this.findOne(id);
     await this.itemRepository.remove(task);
+
+    return true;
   }
 }

@@ -6,6 +6,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { ItemsModule } from './items/items.module';
 import { CategoriesModule } from './categories/categories.module';
+import { Category } from './categories/entities/category.entity';
+import { Item } from './items/entities/item.entity';
 
 @Module({
   imports: [
@@ -18,6 +20,7 @@ import { CategoriesModule } from './categories/categories.module';
       useFactory: async (configService: ConfigService) => {
         const connection: TypeOrmModuleOptions = {
           type: 'postgres',
+          entities: [Item, Category],
           host: configService.get('DATABASE_HOST'),
           port: configService.get('DATABASE_PORT'),
           username: configService.get('DATABASE_USERNAME'),

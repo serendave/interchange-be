@@ -1,31 +1,31 @@
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
 import { CategoriesService } from './categories.service';
-import { Category } from './entities/category.type';
+import { CategoryType } from './entities/category.type';
 import { CreateCategoryInput } from './dto/create-category.input';
 import { UpdateCategoryInput } from './dto/update-category.input';
 
-@Resolver(() => Category)
+@Resolver(() => CategoryType)
 export class CategoriesResolver {
   constructor(private readonly categoriesService: CategoriesService) {}
 
-  @Mutation(() => Category)
+  @Mutation(() => CategoryType)
   createCategory(
     @Args('createCategoryInput') createCategoryInput: CreateCategoryInput,
   ) {
     return this.categoriesService.create(createCategoryInput);
   }
 
-  @Query(() => [Category], { name: 'categories' })
+  @Query(() => [CategoryType], { name: 'categories' })
   findAll() {
     return this.categoriesService.findAll();
   }
 
-  @Query(() => Category, { name: 'category' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
+  @Query(() => CategoryType, { name: 'category' })
+  findOne(@Args('id') id: string) {
     return this.categoriesService.findOne(id);
   }
 
-  @Mutation(() => Category)
+  @Mutation(() => CategoryType)
   updateCategory(
     @Args('updateCategoryInput') updateCategoryInput: UpdateCategoryInput,
   ) {
@@ -35,8 +35,8 @@ export class CategoriesResolver {
     );
   }
 
-  @Mutation(() => Category)
-  removeCategory(@Args('id', { type: () => Int }) id: number) {
+  @Mutation(() => Boolean)
+  removeCategory(@Args('id') id: string) {
     return this.categoriesService.remove(id);
   }
 }

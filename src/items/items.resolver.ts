@@ -28,7 +28,7 @@ export class ItemsResolver {
     return this.itemsService.update(updateItemInput.id, updateItemInput);
   }
 
-  @Mutation(() => ItemType)
+  @Mutation(() => Boolean)
   removeItem(@Args('id') id: string) {
     return this.itemsService.remove(id);
   }
