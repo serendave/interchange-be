@@ -8,6 +8,7 @@ import { ItemsModule } from './items/items.module';
 import { CategoriesModule } from './categories/categories.module';
 import { Category } from './categories/entities/category.entity';
 import { Item } from './items/entities/item.entity';
+import { ChatsModule } from './chats/chats.module';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { Item } from './items/entities/item.entity';
     AuthModule,
     ItemsModule,
     CategoriesModule,
+    ChatsModule,
   ],
   controllers: [],
   providers: [],
