@@ -1,9 +1,12 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { UseGuards } from '@nestjs/common';
+import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { ItemsService } from './items.service';
 import { ItemType } from './entities/item.type';
 import { CreateItemInput } from './dto/create-item.input';
 import { UpdateItemInput } from './dto/update-item.input';
+import { AuthGraphQLGuard } from 'src/auth/guards';
 
+@UseGuards(AuthGraphQLGuard)
 @Resolver(() => ItemType)
 export class ItemsResolver {
   constructor(private readonly itemsService: ItemsService) {}

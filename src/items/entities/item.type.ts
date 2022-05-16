@@ -1,4 +1,4 @@
-import { ObjectType, Field, ID } from '@nestjs/graphql';
+import { ObjectType, Field, ID, GraphQLISODateTime } from '@nestjs/graphql';
 
 @ObjectType('Item')
 export class ItemType {
@@ -11,8 +11,8 @@ export class ItemType {
   @Field()
   description?: string;
 
-  @Field()
-  dateCreated: string;
+  @Field(() => GraphQLISODateTime)
+  dateCreated: Date;
 
   @Field()
   active: boolean;

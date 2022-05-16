@@ -1,7 +1,44 @@
-import { ObjectType, Field, Int } from '@nestjs/graphql';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  Index,
+  PrimaryColumn,
+} from 'typeorm';
+import { Point } from 'geojson';
 
-@ObjectType()
+@Entity()
 export class User {
-  @Field(() => Int, { description: 'Example field (placeholder)' })
-  exampleField: number;
+  @PrimaryColumn('uuid')
+  id: string;
+
+  @Column({ unique: true })
+  email: string;
+
+  @Column()
+  firstName: string;
+
+  @Column()
+  lastName: string;
+
+  @Column()
+  password: string;
+
+  @Column({ nullable: true })
+  rating: number;
+
+  @Index({ spatial: true })
+  @Column({
+    type: 'geography',
+    spatialFeatureType: 'Point',
+    srid: 4326,
+    nullable: true,
+  })
+  location: Point;
+
+  @Column({ nullable: true })
+  photo: string;
+
+  @CreateDateColumn()
+  dateJoined: Date;
 }
