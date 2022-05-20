@@ -1,21 +1,26 @@
-import { Column, CreateDateColumn, Entity, PrimaryColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  PrimaryColumn,
+} from 'typeorm';
+import { Category } from 'src/categories/entities/category.entity';
+import { User } from 'src/auth/entities/user.entity';
 
 @Entity()
 export class Item {
   @PrimaryColumn('uuid')
   id: string;
 
-  // TODO: convert to foreign key
-  // @Column()
-  // categoryId?: string;
+  @ManyToOne(() => Category, { nullable: true })
+  category?: Category;
 
-  // TODO: convert to foreign key
-  // @Column()
-  // subcategoryId?: string;
+  @ManyToOne(() => Category, { nullable: true })
+  subcategory?: string;
 
-  // TODO: convert to foreign key
-  // @Column()
-  // userId?: string;
+  @ManyToOne(() => User, (user) => user.items)
+  user?: string;
 
   @Column()
   name: string;

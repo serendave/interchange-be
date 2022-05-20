@@ -1,12 +1,12 @@
 import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
 import { CategoriesService } from './categories.service';
 import { CategoryType } from './entities/category.type';
 import { CreateCategoryInput } from './dto/create-category.input';
 import { UpdateCategoryInput } from './dto/update-category.input';
+import { AuthGraphQLGuard } from 'src/auth/guards';
 
-@UseGuards(AuthGuard())
+@UseGuards(AuthGraphQLGuard)
 @Resolver(() => CategoryType)
 export class CategoriesResolver {
   constructor(private readonly categoriesService: CategoriesService) {}

@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany, PrimaryColumn } from 'typeorm';
 
 @Entity()
 export class Category {
@@ -8,8 +8,11 @@ export class Category {
   @Column()
   name: string;
 
-  // @Column()
-  // parentId: string;
+  @ManyToOne(() => Category, (category) => category.children)
+  parent: Category;
+
+  @OneToMany(() => Category, (category) => category.parent)
+  children: Category[];
 
   // @Column()
   // icon: string;

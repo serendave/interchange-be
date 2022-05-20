@@ -3,9 +3,14 @@ import {
   CreateDateColumn,
   Entity,
   Index,
+  JoinColumn,
+  OneToMany,
+  OneToOne,
   PrimaryColumn,
 } from 'typeorm';
 import { Point } from 'geojson';
+import { Item } from 'src/items/entities/item.entity';
+import { TelegramProfile } from 'src/telegram/entities/telegram-profile.entity';
 
 @Entity()
 export class User {
@@ -41,4 +46,10 @@ export class User {
 
   @CreateDateColumn()
   dateJoined: Date;
+
+  @OneToMany(() => Item, (item) => item.user, { nullable: true })
+  items: Item[];
+
+  @OneToOne(() => TelegramProfile, { nullable: true })
+  telegramProfile: TelegramProfile;
 }
