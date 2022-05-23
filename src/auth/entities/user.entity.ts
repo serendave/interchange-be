@@ -46,7 +46,7 @@ export class User {
   @CreateDateColumn()
   dateJoined: Date;
 
-  @OneToMany(() => Item, (item) => item.user, { nullable: true })
+  @OneToMany(() => Item, (item) => item.user, { nullable: true, eager: true })
   items: Item[];
 
   @OneToOne(() => TelegramProfile, { nullable: true })

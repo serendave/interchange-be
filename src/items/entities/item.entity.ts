@@ -19,8 +19,8 @@ export class Item {
   @ManyToOne(() => Category, { nullable: true })
   subcategory?: string;
 
-  @ManyToOne(() => User, (user) => user.items)
-  user?: string;
+  @ManyToOne(() => User, (user) => user.items, { cascade: true })
+  user?: User;
 
   @Column()
   name: string;

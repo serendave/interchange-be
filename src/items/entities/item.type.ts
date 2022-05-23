@@ -5,6 +5,9 @@ export class ItemType {
   @Field(() => ID)
   id: string;
 
+  @Field(() => ID)
+  user: string;
+
   @Field()
   name: string;
 

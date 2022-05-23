@@ -5,6 +5,8 @@ import { ItemType } from './entities/item.type';
 import { CreateItemInput } from './dto/create-item.input';
 import { UpdateItemInput } from './dto/update-item.input';
 import { AuthGraphQLGuard } from 'src/auth/guards';
+import { GetUser } from 'src/auth/decorators/get-user.decorator';
+import { User } from 'src/auth/entities/user.entity';
 
 @UseGuards(AuthGraphQLGuard)
 @Resolver(() => ItemType)
@@ -12,8 +14,11 @@ export class ItemsResolver {
   constructor(private readonly itemsService: ItemsService) {}
 
   @Mutation(() => ItemType)
-  createItem(@Args('createItemInput') createItemInput: CreateItemInput) {
-    return this.itemsService.create(createItemInput);
+  createItem(
+    @GetUser() user: User,
+    @Args('createItemInput') createItemInput: CreateItemInput,
+  ) {
+    return this.itemsService.create(createItemInput, user);
   }
 
   @Query(() => [ItemType], { name: 'items' })

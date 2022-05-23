@@ -1,4 +1,6 @@
 import { ObjectType, Field, Float, ID } from '@nestjs/graphql';
+import { Item } from 'src/items/entities/item.entity';
+import { ItemType } from 'src/items/entities/item.type';
 
 @ObjectType()
 export class LocationData {
@@ -28,6 +30,9 @@ export class UserType {
 
   @Field(() => Float)
   rating: number;
+
+  @Field(() => [ItemType])
+  items: Item[];
 
   @Field(() => LocationData)
   location: LocationData;
