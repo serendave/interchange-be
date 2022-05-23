@@ -1,5 +1,13 @@
 import { ObjectType, Field, Float, ID } from '@nestjs/graphql';
-import { Location } from '../dto';
+
+@ObjectType()
+export class LocationData {
+  @Field(() => Float)
+  latitude?: number;
+
+  @Field(() => Float)
+  longitude?: number;
+}
 
 @ObjectType('User')
 export class UserType {
@@ -21,6 +29,6 @@ export class UserType {
   @Field(() => Float)
   rating: number;
 
-  @Field(() => Location)
-  location: Location;
+  @Field(() => LocationData)
+  location: LocationData;
 }

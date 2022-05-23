@@ -28,8 +28,8 @@ export class Item {
   @Column()
   description?: string;
 
-  // @Column()
-  // photos?: string[];
+  @Column('varchar', { array: true, default: [] })
+  photos?: string[];
 
   @CreateDateColumn()
   dateCreated: Date;
@@ -37,6 +37,6 @@ export class Item {
   @Column()
   active: boolean;
 
-  @Column('varchar', { array: true })
+  @Column('varchar', { array: true, default: [] })
   tags?: string[];
 }

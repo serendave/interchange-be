@@ -54,4 +54,13 @@ export class ItemsService {
 
     return true;
   }
+
+  async processItemImages(itemId: string, images: string[]): Promise<boolean> {
+    const item = await this.findOne(itemId);
+
+    item.photos = [...item.photos, ...images];
+    await this.itemRepository.save(item);
+
+    return true;
+  }
 }

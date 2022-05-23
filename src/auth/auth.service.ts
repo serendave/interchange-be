@@ -4,9 +4,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserInput, SignInInput } from './dto';
 import { JwtPayload } from './interfaces/jwt-payload';
 import { UsersRepository } from './repositories/users.repository';
-import { JWTResponse } from './interfaces/jwt-response';
-import * as bcrypt from 'bcrypt';
+import { AuthResponse } from './interfaces/jwt-response';
 import { User } from './entities/user.entity';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -16,21 +16,23 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async signUp(createUserInput: CreateUserInput): Promise<JWTResponse> {
+  async signUp(createUserInput: CreateUserInput): Promise<AuthResponse> {
     const user = await this.usersRepository.createUser(createUserInput);
     const payload: JwtPayload = { email: user.email };
 
     const accessToken = await this.jwtService.signAsync(payload);
 
-    return { accessToken };
+    return { accessToken, user };
   }
 
-  async signIn(signInInput: SignInInput): Promise<JWTResponse> {
-    if (await this.userExists(signInInput)) {
+  async signIn(signInInput: SignInInput): Promise<AuthResponse> {
+    const user = await this.userExists(signInInput);
+
+    if (user) {
       const payload: JwtPayload = { email: signInInput.email };
       const accessToken = await this.jwtService.signAsync(payload);
 
-      return { accessToken };
+      return { accessToken, user };
     }
   }
 
@@ -47,6 +49,18 @@ export class AuthService {
     } else {
       throw new UnauthorizedException('Please check your login credentials');
     }
+  }
+
+  async processProfilePhoto(
+    userId: string,
+    profilePhoto: string,
+  ): Promise<boolean> {
+    const user = await this.usersRepository.findOne(userId);
+
+    user.photo = profilePhoto;
+    await this.usersRepository.save(user);
+
+    return true;
   }
 
   // findAll() {
