@@ -31,6 +31,9 @@ export class UserType {
   @Field(() => Float)
   rating: number;
 
+  @Field()
+  dateJoined: string;
+
   @Field(() => [ItemType])
   items: Item[];
 

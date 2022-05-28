@@ -1,7 +1,8 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateUserInput, SignInInput } from './dto';
+import { Point } from 'geojson';
+import { CreateUserInput, SignInInput, UpdateUserInput } from './dto';
 import { JwtPayload } from './interfaces/jwt-payload';
 import { UsersRepository } from './repositories/users.repository';
 import { AuthResponse } from './interfaces/jwt-response';
@@ -63,19 +64,45 @@ export class AuthService {
     return true;
   }
 
-  // findAll() {
-  //   return `This action returns all users`;
-  // }
+  async findAll(): Promise<User[]> {
+    return this.usersRepository.find();
+  }
 
-  // findOne(id: number) {
-  //   return `This action returns a #${id} user`;
-  // }
+  async findOne(id: string): Promise<User> {
+    return this.usersRepository.findOne(id);
+  }
 
-  // update(id: number, updateUserInput: UpdateUserInput) {
-  //   return `This action updates a #${id} user`;
-  // }
+  async update(id: string, updateUserInput: UpdateUserInput): Promise<User> {
+    let user = await this.usersRepository.findOne(id);
 
-  // remove(id: number) {
-  //   return `This action removes a #${id} user`;
-  // }
+    const locationObject: Point = {
+      type: 'Point',
+      coordinates: [
+        updateUserInput?.location?.longitude,
+        updateUserInput?.location?.latitude,
+      ],
+    };
+
+    delete updateUserInput.id;
+    delete updateUserInput.location;
+
+    user = {
+      ...user,
+      ...updateUserInput,
+      location: locationObject.coordinates[0] ? locationObject : user.location,
+    };
+
+    await this.usersRepository.save(user);
+
+    return user;
+  }
+
+  async remove(id: string): Promise<boolean> {
+    const user = await this.findOne(id);
+
+    user.active = false;
+    await this.usersRepository.save(user);
+
+    return true;
+  }
 }

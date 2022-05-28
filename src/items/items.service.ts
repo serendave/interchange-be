@@ -6,18 +6,26 @@ import { Item } from './entities/item.entity';
 import { ItemRepository } from './repositories/item.repository';
 import { v4 as uuid } from 'uuid';
 import { User } from 'src/auth/entities/user.entity';
+import { CategoriesService } from 'src/categories/categories.service';
+import { GetItemsInput } from './dto/get-items.input';
 
 @Injectable()
 export class ItemsService {
   constructor(
     @InjectRepository(ItemRepository) private itemRepository: ItemRepository,
+    private categoriesService: CategoriesService,
   ) {}
 
   async create(createItemInput: CreateItemInput, user: User): Promise<Item> {
+    const category = await this.categoriesService.findOne(
+      createItemInput.categoryId,
+    );
+
     const item = this.itemRepository.create({
       id: uuid(),
       user: user,
       active: true,
+      category,
       ...createItemInput,
     });
 
@@ -25,8 +33,8 @@ export class ItemsService {
     return item;
   }
 
-  async findAll(): Promise<Item[]> {
-    return this.itemRepository.find();
+  async findAll(getItemsInput: GetItemsInput): Promise<Item[]> {
+    return this.itemRepository.getItems(getItemsInput);
   }
 
   async findOne(id: string): Promise<Item> {

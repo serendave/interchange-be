@@ -4,6 +4,7 @@ import { ItemsService } from './items.service';
 import { ItemType } from './entities/item.type';
 import { CreateItemInput } from './dto/create-item.input';
 import { UpdateItemInput } from './dto/update-item.input';
+import { GetItemsInput } from './dto/get-items.input';
 import { AuthGraphQLGuard } from 'src/auth/guards';
 import { GetUser } from 'src/auth/decorators/get-user.decorator';
 import { User } from 'src/auth/entities/user.entity';
@@ -22,8 +23,15 @@ export class ItemsResolver {
   }
 
   @Query(() => [ItemType], { name: 'items' })
-  findAll() {
-    return this.itemsService.findAll();
+  async findAll(
+    @Args({
+      name: 'getItemsInput',
+      type: () => GetItemsInput,
+      nullable: true,
+    })
+    getItemsInput?: GetItemsInput,
+  ) {
+    return this.itemsService.findAll(getItemsInput);
   }
 
   @Query(() => ItemType, { name: 'item' })

@@ -10,6 +10,9 @@ export class CreateItemInput {
   @Field()
   description?: string;
 
+  @Field(() => ID)
+  categoryId: string;
+
   @IsUUID('all', { each: true })
   @Field(() => [ID], { defaultValue: [] })
   tags?: string[];

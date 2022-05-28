@@ -1,7 +1,14 @@
-import { Query, Resolver, Mutation, Args } from '@nestjs/graphql';
+import {
+  Query,
+  Resolver,
+  Mutation,
+  Args,
+  ResolveField,
+  Parent,
+} from '@nestjs/graphql';
 import { AuthService } from './auth.service';
 import { UserType } from './entities/user.type';
-import { CreateUserInput, SignInInput } from './dto';
+import { CreateUserInput, SignInInput, UpdateUserInput } from './dto';
 import { AuthResponse } from './entities/auth-response.type';
 import { GetUser } from './decorators/get-user.decorator';
 import { User } from './entities/user.entity';
@@ -28,23 +35,32 @@ export class AuthResolver {
     return user;
   }
 
-  // @Query(() => [UserType], { name: 'users' })
-  // findAll() {
-  //   return this.authService.findAll();
-  // }
+  @ResolveField()
+  async location(@Parent() user: User) {
+    const userData = await this.authService.findOne(user.id);
+    return {
+      latitude: userData.location.coordinates[1],
+      longitude: userData.location.coordinates[0],
+    };
+  }
 
-  // @Query(() => UserType, { name: 'user' })
-  // findOne(@Args('id', { type: () => Int }) id: number) {
-  //   return this.authService.findOne(id);
-  // }
+  @Query(() => [UserType], { name: 'users' })
+  findAll() {
+    return this.authService.findAll();
+  }
 
-  // @Mutation(() => UserType)
-  // updateUser(@Args('updateUserInput') updateUserInput: UpdateUserInput) {
-  //   return this.authService.update(updateUserInput.id, updateUserInput);
-  // }
+  @Query(() => UserType, { name: 'user' })
+  findOne(@Args('id') id: string) {
+    return this.authService.findOne(id);
+  }
 
-  // @Mutation(() => UserType)
-  // removeUser(@Args('id', { type: () => Int }) id: number) {
-  //   return this.authService.remove(id);
-  // }
+  @Mutation(() => UserType)
+  updateUser(@Args('updateUserInput') updateUserInput: UpdateUserInput) {
+    return this.authService.update(updateUserInput.id, updateUserInput);
+  }
+
+  @Mutation(() => UserType)
+  removeUser(@Args('id') id: string) {
+    return this.authService.remove(id);
+  }
 }

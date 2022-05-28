@@ -13,14 +13,11 @@ export class Item {
   @PrimaryColumn('uuid')
   id: string;
 
-  @ManyToOne(() => Category, { nullable: true })
-  category?: Category;
-
-  @ManyToOne(() => Category, { nullable: true })
-  subcategory?: string;
+  @ManyToOne(() => Category, { eager: true })
+  category: Category;
 
   @ManyToOne(() => User, (user) => user.items, { cascade: true })
-  user?: User;
+  user: User;
 
   @Column()
   name: string;

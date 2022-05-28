@@ -1,4 +1,5 @@
 import { ObjectType, Field, ID, GraphQLISODateTime } from '@nestjs/graphql';
+import { CategoryType } from 'src/categories/entities/category.type';
 
 @ObjectType('Item')
 export class ItemType {
@@ -7,6 +8,9 @@ export class ItemType {
 
   @Field(() => ID)
   user: string;
+
+  @Field(() => CategoryType)
+  category?: CategoryType;
 
   @Field()
   name: string;
@@ -22,4 +26,7 @@ export class ItemType {
 
   @Field(() => [String])
   tags?: string;
+
+  @Field(() => [String])
+  photos?: string[];
 }

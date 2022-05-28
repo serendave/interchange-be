@@ -51,4 +51,7 @@ export class User {
 
   @OneToOne(() => TelegramProfile, { nullable: true })
   telegramProfile: TelegramProfile;
+
+  @Column({ default: true })
+  active: boolean;
 }

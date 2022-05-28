@@ -5,9 +5,14 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ItemRepository } from './repositories/item.repository';
 import { AuthModule } from 'src/auth/auth.module';
 import { ItemsController } from './items.controller';
+import { CategoriesModule } from 'src/categories/categories.module';
 
 @Module({
-  imports: [AuthModule, TypeOrmModule.forFeature([ItemRepository])],
+  imports: [
+    AuthModule,
+    CategoriesModule,
+    TypeOrmModule.forFeature([ItemRepository]),
+  ],
   providers: [ItemsResolver, ItemsService],
   controllers: [ItemsController],
 })
