@@ -7,6 +7,7 @@ import { JwtPayload } from './interfaces/jwt-payload';
 import { UsersRepository } from './repositories/users.repository';
 import { AuthResponse } from './interfaces/jwt-response';
 import { User } from './entities/user.entity';
+import { GetUsersInput } from './dto/get-users.input';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -64,8 +65,8 @@ export class AuthService {
     return true;
   }
 
-  async findAll(): Promise<User[]> {
-    return this.usersRepository.find();
+  async findAll(getUsersInput: GetUsersInput): Promise<User[]> {
+    return this.usersRepository.getUsers(getUsersInput);
   }
 
   async findOne(id: string): Promise<User> {

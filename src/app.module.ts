@@ -10,6 +10,7 @@ import { Category } from './categories/entities/category.entity';
 import { Item } from './items/entities/item.entity';
 import { ChatsModule } from './chats/chats.module';
 import { TelegramModule } from './telegram/telegram.module';
+import { EventsModule } from './events/events.module';
 
 @Module({
   imports: [
@@ -44,6 +45,7 @@ import { TelegramModule } from './telegram/telegram.module';
     CategoriesModule,
     ChatsModule,
     TelegramModule,
+    EventsModule,
   ],
   controllers: [],
   providers: [],

@@ -14,6 +14,7 @@ import { GetUser } from './decorators/get-user.decorator';
 import { User } from './entities/user.entity';
 import { UseGuards } from '@nestjs/common';
 import { AuthGraphQLGuard } from './guards';
+import { GetUsersInput } from './dto/get-users.input';
 
 @Resolver(() => UserType)
 export class AuthResolver {
@@ -45,8 +46,15 @@ export class AuthResolver {
   }
 
   @Query(() => [UserType], { name: 'users' })
-  findAll() {
-    return this.authService.findAll();
+  findAll(
+    @Args({
+      name: 'getUsersInput',
+      type: () => GetUsersInput,
+      nullable: true,
+    })
+    getUsersInput: GetUsersInput,
+  ) {
+    return this.authService.findAll(getUsersInput);
   }
 
   @Query(() => UserType, { name: 'user' })

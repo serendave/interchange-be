@@ -8,7 +8,7 @@ import {
 } from 'class-validator';
 
 @InputType()
-class Location {
+export class Location {
   @Field(() => Float)
   latitude?: number;
 
