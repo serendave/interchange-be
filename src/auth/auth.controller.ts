@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Post,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
@@ -13,6 +14,7 @@ import { AuthService } from './auth.service';
 export class AuthController {
   constructor(private authService: AuthService) {}
 
+  @Post('upload-user-photo')
   @UseInterceptors(
     FileInterceptor('file', {
       storage: diskStorage({

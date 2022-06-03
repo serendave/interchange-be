@@ -14,6 +14,7 @@ import { GetUser } from 'src/auth/decorators/get-user.decorator';
 import { User } from 'src/auth/entities/user.entity';
 import { UseGuards } from '@nestjs/common';
 import { AuthGraphQLGuard } from 'src/auth/guards';
+import { JoinEventInput } from './dto/join-event.input';
 
 @UseGuards(AuthGraphQLGuard)
 @Resolver(() => EventType)
@@ -50,6 +51,11 @@ export class EventsResolver {
   @Mutation(() => EventType)
   updateEvent(@Args('updateEventInput') updateEventInput: UpdateEventInput) {
     return this.eventsService.update(updateEventInput.id, updateEventInput);
+  }
+
+  @Mutation(() => EventType)
+  joinEvent(@Args('joinEventInput') joinEventInput: JoinEventInput) {
+    return this.eventsService.joinEvent(joinEventInput);
   }
 
   @Mutation(() => EventType)

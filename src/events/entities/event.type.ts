@@ -1,5 +1,4 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
-import { User } from 'src/auth/entities/user.entity';
 import { LocationData, UserType } from 'src/auth/entities/user.type';
 
 @ObjectType()
@@ -29,5 +28,5 @@ export class EventType {
   creator: UserType;
 
   @Field(() => [UserType])
-  vititors: User[];
+  visitors: UserType[];
 }

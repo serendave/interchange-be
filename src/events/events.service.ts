@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { v4 as uuid } from 'uuid';
 import { CreateEventInput } from './dto/create-event.input';
@@ -8,6 +12,7 @@ import { Event } from './entities/event.entity';
 import { User } from 'src/auth/entities/user.entity';
 import { convertLocationToPoint } from 'src/utils';
 import { AuthService } from 'src/auth/auth.service';
+import { JoinEventInput } from './dto/join-event.input';
 
 @Injectable()
 export class EventsService {
@@ -36,15 +41,39 @@ export class EventsService {
   }
 
   async findAll(): Promise<Event[]> {
-    return this.eventsRepository.find();
+    const events = await this.eventsRepository.find({
+      relations: ['creator', 'visitors'],
+    });
+    return events;
   }
 
   async findOne(id: string): Promise<Event> {
-    const event = this.eventsRepository.findOne(id);
+    const event = await this.eventsRepository.findOne(id, {
+      relations: ['creator', 'visitors'],
+    });
 
     if (!event) {
       throw new NotFoundException('No event with such id was found');
     }
+
+    return event;
+  }
+
+  async joinEvent(joinEventInput: JoinEventInput): Promise<Event> {
+    const { userId, eventId } = joinEventInput;
+
+    const event = await this.findOne(eventId);
+
+    if (event.visitors.some((visitor) => visitor.id === userId)) {
+      throw new BadRequestException(
+        'This user is already participant of this event',
+      );
+    }
+
+    const user = await this.authService.findOne(userId);
+
+    event.visitors = [...event.visitors, user];
+    await this.eventsRepository.save(event);
 
     return event;
   }
