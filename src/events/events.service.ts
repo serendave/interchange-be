@@ -5,21 +5,28 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { v4 as uuid } from 'uuid';
-import { CreateEventInput } from './dto/create-event.input';
-import { UpdateEventInput } from './dto/update-event.input';
+import { Repository } from 'typeorm';
+import {
+  CreateEventInput,
+  CreateInviteInput,
+  UpdateEventInput,
+  JoinEventInput,
+  GetEventsInput,
+} from './dto';
 import { EventsResository } from './repositories/event.repository';
 import { Event } from './entities/event.entity';
 import { User } from 'src/auth/entities/user.entity';
 import { convertLocationToPoint } from 'src/utils';
 import { AuthService } from 'src/auth/auth.service';
-import { JoinEventInput } from './dto/join-event.input';
-import { GetEventsInput } from './dto/get-event.input';
+import { Invite } from './entities/invite.entity';
 
 @Injectable()
 export class EventsService {
   constructor(
     @InjectRepository(EventsResository)
     private eventsRepository: EventsResository,
+    @InjectRepository(Invite)
+    private inviteRepository: Repository<Invite>,
     private authService: AuthService,
   ) {}
 
@@ -75,6 +82,22 @@ export class EventsService {
     await this.eventsRepository.save(event);
 
     return event;
+  }
+
+  async createInvite(createInviteInput: CreateInviteInput): Promise<Invite> {
+    const { userId, eventId } = createInviteInput;
+
+    const user = await this.authService.findOne(userId);
+    const event = await this.eventsRepository.findOne(eventId);
+
+    const invite = this.inviteRepository.create({
+      user,
+      event,
+    });
+
+    await this.inviteRepository.save(invite);
+
+    return invite;
   }
 
   async update(id: string, updateEventInput: UpdateEventInput): Promise<Event> {

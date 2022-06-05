@@ -1,4 +1,6 @@
 import { ObjectType, Field, Float, ID } from '@nestjs/graphql';
+import { Invite } from 'src/events/entities/invite.entity';
+import { InviteType } from 'src/events/entities/invite.type';
 import { Item } from 'src/items/entities/item.entity';
 import { ItemType } from 'src/items/entities/item.type';
 
@@ -42,4 +44,7 @@ export class UserType {
 
   @Field(() => LocationData)
   location: LocationData;
+
+  @Field(() => [InviteType], { nullable: true })
+  invitations: Invite[];
 }

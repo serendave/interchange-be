@@ -8,14 +8,18 @@ import {
 } from '@nestjs/graphql';
 import { EventsService } from './events.service';
 import { EventType } from './entities/event.type';
-import { CreateEventInput } from './dto/create-event.input';
-import { UpdateEventInput } from './dto/update-event.input';
+import {
+  CreateEventInput,
+  CreateInviteInput,
+  UpdateEventInput,
+  JoinEventInput,
+  GetEventsInput,
+} from './dto';
 import { GetUser } from 'src/auth/decorators/get-user.decorator';
 import { User } from 'src/auth/entities/user.entity';
 import { UseGuards } from '@nestjs/common';
 import { AuthGraphQLGuard } from 'src/auth/guards';
-import { JoinEventInput } from './dto/join-event.input';
-import { GetEventsInput } from './dto/get-event.input';
+import { InviteType } from './entities/invite.type';
 
 @UseGuards(AuthGraphQLGuard)
 @Resolver(() => EventType)
@@ -59,6 +63,13 @@ export class EventsResolver {
   @Mutation(() => EventType)
   joinEvent(@Args('joinEventInput') joinEventInput: JoinEventInput) {
     return this.eventsService.joinEvent(joinEventInput);
+  }
+
+  @Mutation(() => InviteType)
+  createInvite(
+    @Args('createInviteInput') createInviteInput: CreateInviteInput,
+  ) {
+    return this.eventsService.createInvite(createInviteInput);
   }
 
   @Mutation(() => EventType)

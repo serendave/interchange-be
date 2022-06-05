@@ -10,6 +10,7 @@ import {
 } from '@nestjs/common';
 import { convertLocationToPoint } from 'src/utils/format';
 import { GetUsersInput } from '../dto/get-users.input';
+import { Invite } from 'src/events/entities/invite.entity';
 
 @EntityRepository(User)
 export class UsersRepository extends Repository<User> {
@@ -43,8 +44,20 @@ export class UsersRepository extends Repository<User> {
   async getUsers(getUsersInput: GetUsersInput): Promise<User[]> {
     const query = this.createQueryBuilder('user');
 
-    if (getUsersInput.ids.length) {
+    if (getUsersInput?.ids?.length) {
       query.where('user.id IN(:ids)', { ids: [...getUsersInput.ids] });
+    }
+
+    if (getUsersInput?.email) {
+      query.andWhere('user.email LIKE :email', {
+        email: `${getUsersInput.email}%`,
+      });
+    }
+
+    if (getUsersInput?.checkForInvite) {
+      query
+        .leftJoinAndSelect('user.invitations', 'invite')
+        .leftJoinAndSelect('invite.event', 'event');
     }
 
     const users = await query.getMany();

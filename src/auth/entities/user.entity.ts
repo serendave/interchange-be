@@ -10,6 +10,7 @@ import {
 import { Point } from 'geojson';
 import { Item } from 'src/items/entities/item.entity';
 import { TelegramProfile } from 'src/telegram/entities/telegram-profile.entity';
+import { Invite } from 'src/events/entities/invite.entity';
 
 @Entity()
 export class User {
@@ -54,4 +55,7 @@ export class User {
 
   @Column({ default: true })
   active: boolean;
+
+  @OneToMany(() => Invite, (invite) => invite.user)
+  invitations: Invite[];
 }
