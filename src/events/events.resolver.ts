@@ -15,6 +15,7 @@ import { User } from 'src/auth/entities/user.entity';
 import { UseGuards } from '@nestjs/common';
 import { AuthGraphQLGuard } from 'src/auth/guards';
 import { JoinEventInput } from './dto/join-event.input';
+import { GetEventsInput } from './dto/get-event.input';
 
 @UseGuards(AuthGraphQLGuard)
 @Resolver(() => EventType)
@@ -30,8 +31,10 @@ export class EventsResolver {
   }
 
   @Query(() => [EventType], { name: 'events' })
-  findAll() {
-    return this.eventsService.findAll();
+  findAll(
+    @Args('getEventsInput', { nullable: true }) getEventsInput?: GetEventsInput,
+  ) {
+    return this.eventsService.findAll(getEventsInput);
   }
 
   @Query(() => EventType, { name: 'event' })

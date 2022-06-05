@@ -13,6 +13,7 @@ import { User } from 'src/auth/entities/user.entity';
 import { convertLocationToPoint } from 'src/utils';
 import { AuthService } from 'src/auth/auth.service';
 import { JoinEventInput } from './dto/join-event.input';
+import { GetEventsInput } from './dto/get-event.input';
 
 @Injectable()
 export class EventsService {
@@ -40,10 +41,8 @@ export class EventsService {
     return event;
   }
 
-  async findAll(): Promise<Event[]> {
-    const events = await this.eventsRepository.find({
-      relations: ['creator', 'visitors'],
-    });
+  async findAll(getEventsInput?: GetEventsInput): Promise<Event[]> {
+    const events = this.eventsRepository.getEvents(getEventsInput);
     return events;
   }
 

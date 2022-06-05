@@ -34,8 +34,8 @@ export class UserType {
   @Field()
   dateJoined: string;
 
-  @Field()
-  photo: string;
+  @Field({ nullable: true })
+  photo?: string;
 
   @Field(() => [ItemType])
   items: Item[];
