@@ -14,6 +14,7 @@ import {
   UpdateEventInput,
   JoinEventInput,
   GetEventsInput,
+  GetInvitesInput,
 } from './dto';
 import { GetUser } from 'src/auth/decorators/get-user.decorator';
 import { User } from 'src/auth/entities/user.entity';
@@ -39,6 +40,11 @@ export class EventsResolver {
     @Args('getEventsInput', { nullable: true }) getEventsInput?: GetEventsInput,
   ) {
     return this.eventsService.findAll(getEventsInput);
+  }
+
+  @Query(() => [InviteType], { name: 'invites' })
+  findAllInvites(@Args('getInvitesInput') getInvitesInput: GetInvitesInput) {
+    return this.eventsService.findInvites(getInvitesInput);
   }
 
   @Query(() => EventType, { name: 'event' })

@@ -36,6 +36,9 @@ export class Event {
   @CreateDateColumn()
   dateCreated: Date;
 
+  @Column({ nullable: true })
+  address: string;
+
   @Column({ default: true })
   active: boolean;
 

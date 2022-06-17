@@ -12,6 +12,9 @@ export class CreateEventInput {
   @Field(() => Location)
   location: Location;
 
+  @Field()
+  address: string;
+
   @Field(() => [ID], { nullable: true })
   visitors?: string[];
 

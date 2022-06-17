@@ -6,9 +6,9 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
-import { EventsService } from './events.service';
-import { v4 as uuid } from 'uuid';
 import { diskStorage } from 'multer';
+import { v4 as uuid } from 'uuid';
+import { EventsService } from './events.service';
 
 @Controller('events')
 export class EventsController {

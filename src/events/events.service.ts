@@ -12,6 +12,7 @@ import {
   UpdateEventInput,
   JoinEventInput,
   GetEventsInput,
+  GetInvitesInput,
 } from './dto';
 import { EventsResository } from './repositories/event.repository';
 import { Event } from './entities/event.entity';
@@ -45,8 +46,13 @@ export class EventsService {
   }
 
   async findAll(getEventsInput?: GetEventsInput): Promise<Event[]> {
-    const events = this.eventsRepository.getEvents(getEventsInput);
-    return events;
+    return this.eventsRepository.getEvents(getEventsInput);
+  }
+
+  async findInvites(getInvitesInput: GetInvitesInput): Promise<Invite[]> {
+    const user = await this.authService.findOne(getInvitesInput.userId);
+
+    return this.inviteRepository.find({ user });
   }
 
   async findOne(id: string): Promise<Event> {
@@ -76,6 +82,9 @@ export class EventsService {
 
     event.visitors = [...event.visitors, user];
     await this.eventsRepository.save(event);
+
+    const invite = await this.inviteRepository.find({ event, user });
+    await this.inviteRepository.remove(invite);
 
     return event;
   }
