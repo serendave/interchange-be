@@ -10,7 +10,6 @@ import {
 } from '@nestjs/common';
 import { convertLocationToPoint } from 'src/utils/format';
 import { GetUsersInput } from '../dto/get-users.input';
-import { Invite } from 'src/events/entities/invite.entity';
 
 @EntityRepository(User)
 export class UsersRepository extends Repository<User> {

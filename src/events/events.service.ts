@@ -31,15 +31,11 @@ export class EventsService {
   ) {}
 
   async create(user: User, createEventInput: CreateEventInput): Promise<Event> {
-    const users = await this.authService.findAll({
-      ids: createEventInput.visitors,
-    });
-
     const event = this.eventsRepository.create({
       id: uuid(),
       ...createEventInput,
       creator: user,
-      visitors: users,
+      visitors: [user],
       location: convertLocationToPoint(createEventInput.location),
     });
 
@@ -117,6 +113,18 @@ export class EventsService {
     await this.eventsRepository.save(event);
 
     return event;
+  }
+
+  async processEventImages(
+    eventId: string,
+    images: string[],
+  ): Promise<boolean> {
+    const event = await this.findOne(eventId);
+
+    event.photos = [...event.photos, ...images];
+    await this.eventsRepository.save(event);
+
+    return true;
   }
 
   async remove(id: string): Promise<boolean> {

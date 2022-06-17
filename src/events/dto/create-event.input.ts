@@ -12,6 +12,9 @@ export class CreateEventInput {
   @Field(() => Location)
   location: Location;
 
-  @Field(() => [ID])
+  @Field(() => [ID], { nullable: true })
   visitors?: string[];
+
+  @Field()
+  private: boolean;
 }

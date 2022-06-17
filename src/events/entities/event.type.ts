@@ -12,11 +12,17 @@ export class EventType {
   @Field()
   description: string;
 
+  @Field(() => [String])
+  photos: string[];
+
+  @Field()
+  private: boolean;
+
   @Field(() => LocationData)
   location: LocationData;
 
   @Field()
-  photo?: string;
+  address: string;
 
   @Field()
   dateCreated: string;

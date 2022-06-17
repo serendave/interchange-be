@@ -30,14 +30,17 @@ export class Event {
   })
   location: Point;
 
-  @Column({ nullable: true })
-  photo: string;
+  @Column('varchar', { array: true, default: [] })
+  photos: string[];
 
   @CreateDateColumn()
   dateCreated: Date;
 
   @Column({ default: true })
   active: boolean;
+
+  @Column({ default: false })
+  private: boolean;
 
   @ManyToOne(() => User)
   @JoinColumn()
