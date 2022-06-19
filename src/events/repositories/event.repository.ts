@@ -21,6 +21,12 @@ export class EventsResository extends Repository<Event> {
       });
     }
 
+    if (getEventInput?.name) {
+      query.andWhere('event.name LIKE :name', {
+        name: `%${getEventInput.name}%`,
+      });
+    }
+
     const events = await query.getMany();
     return events;
   }

@@ -7,4 +7,7 @@ export class GetEventsInput {
 
   @Field({ nullable: true })
   visitorId: string;
+
+  @Field({ nullable: true })
+  name: string;
 }
