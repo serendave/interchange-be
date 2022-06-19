@@ -6,11 +6,13 @@ import { ItemRepository } from './repositories/item.repository';
 import { AuthModule } from 'src/auth/auth.module';
 import { ItemsController } from './items.controller';
 import { CategoriesModule } from 'src/categories/categories.module';
+import { TelegramModule } from 'src/telegram/telegram.module';
 
 @Module({
   imports: [
     AuthModule,
     CategoriesModule,
+    TelegramModule,
     TypeOrmModule.forFeature([ItemRepository]),
   ],
   providers: [ItemsResolver, ItemsService],

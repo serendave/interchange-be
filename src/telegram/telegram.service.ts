@@ -11,8 +11,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/auth/entities/user.entity';
 import { CategoriesService } from 'src/categories/categories.service';
 import { Category } from 'src/categories/entities/category.entity';
+import { Item } from 'src/items/entities/item.entity';
 
 const ELEMENTS_PER_ROW = 2;
+const SEARCH_RADIUS_VALUE = 200;
 
 @Injectable()
 export class TelegramService {
@@ -218,5 +220,34 @@ export class TelegramService {
     }
 
     return telegramProfile;
+  }
+
+  async notifyUsersWithNewItem(item: Item) {
+    const findProfilesQuery = this.telegramProfileRepository
+      .createQueryBuilder('profile')
+      .leftJoinAndSelect('profile.user', 'user')
+      .where(
+        'profile.categoriesPreferences @> ARRAY[:categories]::character varying[]',
+        { categories: item.category.id },
+      )
+      .where(
+        'ST_DWithin(user.location, ST_SetSRID(ST_MakePoint(:lng, :lat), 4326), :radius)',
+        {
+          radius: SEARCH_RADIUS_VALUE * 1000,
+          lng: item.user.location.coordinates[0],
+          lat: item.user.location.coordinates[1],
+        },
+      );
+
+    const relatedProfiles = await findProfilesQuery.getMany();
+
+    relatedProfiles.forEach((profile) => {
+      this.bot.telegram.sendMessage(
+        profile.chatId,
+        `A new item ${item.name} in category: "${item.category.name}", that matches your preferences has been posted. Go to the app to view it`,
+      );
+    });
+
+    return true;
   }
 }

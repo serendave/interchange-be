@@ -8,12 +8,14 @@ import { v4 as uuid } from 'uuid';
 import { User } from 'src/auth/entities/user.entity';
 import { CategoriesService } from 'src/categories/categories.service';
 import { GetItemsInput } from './dto/get-items.input';
+import { TelegramService } from 'src/telegram/telegram.service';
 
 @Injectable()
 export class ItemsService {
   constructor(
     @InjectRepository(ItemRepository) private itemRepository: ItemRepository,
     private categoriesService: CategoriesService,
+    private telegramService: TelegramService,
   ) {}
 
   async create(createItemInput: CreateItemInput, user: User): Promise<Item> {
@@ -30,6 +32,8 @@ export class ItemsService {
     });
 
     await this.itemRepository.save(item);
+    this.telegramService.notifyUsersWithNewItem(item);
+
     return item;
   }
 
