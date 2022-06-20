@@ -111,6 +111,8 @@ export class EventsService {
       ids: updateEventInput.visitors,
     });
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     event = {
       ...event,
       ...updateEventInput,

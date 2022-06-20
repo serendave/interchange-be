@@ -1,6 +1,7 @@
 import { Point } from 'geojson';
 import { User } from 'src/auth/entities/user.entity';
 import {
+  BaseEntity,
   Column,
   CreateDateColumn,
   Entity,
@@ -12,7 +13,7 @@ import {
 } from 'typeorm';
 
 @Entity()
-export class Event {
+export class Event extends BaseEntity {
   @PrimaryColumn('uuid')
   id: string;
 

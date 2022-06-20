@@ -87,6 +87,8 @@ export class AuthService {
     delete updateUserInput.id;
     delete updateUserInput.location;
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     user = {
       ...user,
       ...updateUserInput,

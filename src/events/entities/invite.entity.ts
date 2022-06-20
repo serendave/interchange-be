@@ -1,9 +1,15 @@
-import { Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BaseEntity,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { User } from 'src/auth/entities/user.entity';
 import { Event } from './event.entity';
 
 @Entity()
-export class Invite {
+export class Invite extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 

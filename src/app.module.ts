@@ -6,11 +6,16 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { ItemsModule } from './items/items.module';
 import { CategoriesModule } from './categories/categories.module';
-import { Category } from './categories/entities/category.entity';
-import { Item } from './items/entities/item.entity';
 import { ChatsModule } from './chats/chats.module';
 import { TelegramModule } from './telegram/telegram.module';
 import { EventsModule } from './events/events.module';
+import AdminJS from 'adminjs';
+import { AdminModule } from '@adminjs/nestjs';
+// import { adminProvider } from './app.provider';
+import { Database, Resource } from '@adminjs/typeorm';
+import { User, Category, Event, Invite, Item } from './database/entities';
+
+AdminJS.registerAdapter({ Database, Resource });
 
 @Module({
   imports: [
@@ -23,7 +28,7 @@ import { EventsModule } from './events/events.module';
       useFactory: async (configService: ConfigService) => {
         const connection: TypeOrmModuleOptions = {
           type: 'postgres',
-          entities: [Item, Category],
+          entities: [User, Category, Event, Invite, Item],
           host: configService.get('DATABASE_HOST'),
           port: configService.get('DATABASE_PORT'),
           username: configService.get('DATABASE_USERNAME'),
@@ -46,6 +51,15 @@ import { EventsModule } from './events/events.module';
     ChatsModule,
     TelegramModule,
     EventsModule,
+    AdminModule.createAdmin({
+      adminJsOptions: {
+        rootPath: '/admin',
+        resources: [User, Category, Event, Invite, Item],
+        branding: {
+          companyName: 'Interchange.io',
+        },
+      },
+    }),
   ],
   controllers: [],
   providers: [],

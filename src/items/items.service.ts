@@ -58,6 +58,8 @@ export class ItemsService {
 
     delete updateItemInput.id;
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     task = { ...task, ...updateItemInput };
     await this.itemRepository.save(task);
 

@@ -1,8 +1,15 @@
-import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from 'typeorm';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryColumn,
+} from 'typeorm';
 import { User } from 'src/auth/entities/user.entity';
 
 @Entity()
-export class TelegramProfile {
+export class TelegramProfile extends BaseEntity {
   @PrimaryColumn('uuid')
   id: string;
 

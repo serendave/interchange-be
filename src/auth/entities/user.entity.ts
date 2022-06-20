@@ -1,4 +1,5 @@
 import {
+  BaseEntity,
   Column,
   CreateDateColumn,
   Entity,
@@ -13,7 +14,7 @@ import { TelegramProfile } from 'src/telegram/entities/telegram-profile.entity';
 import { Invite } from 'src/events/entities/invite.entity';
 
 @Entity()
-export class User {
+export class User extends BaseEntity {
   @PrimaryColumn('uuid')
   id: string;
 
